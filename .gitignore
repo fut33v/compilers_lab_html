@@ -1,2 +1,5 @@
 #pro.user files
 *.pro.user
+
+#autosave files
+*.autosave
