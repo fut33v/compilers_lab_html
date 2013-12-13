@@ -23,18 +23,21 @@ namespace parser {
     }
 
     cToken cTokensFlow::getToken(){
+        currentToken++;
+        return showToken();
+    }
+
+    cToken cTokensFlow::showToken(){
         int stringN, classN, subClassN;
         char value[256];
         const char* string = FlowOfTokens[currentToken].c_str();
         sscanf(string, "%d %d ", &stringN, &classN);
         if (classN <= 3 || classN == 5){
             sscanf(string, "%d %d %d %s", &stringN, &classN, &subClassN, value);
-            currentToken++;
             std::string Value = value;
             return cToken(stringN, classN, subClassN, Value);
         } else {
             sscanf(string, "%d %d %s", &stringN, &classN, value);
-            currentToken++;
             std::string Value = value;
             return cToken(stringN, classN, Value);
         }

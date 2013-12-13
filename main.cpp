@@ -7,7 +7,8 @@ int main(){
     parser::cTokensFlow tknFlow("tokens");
     while (!tknFlow.isEnd()){
         parser::cToken token;
-        token = tknFlow.getToken();
+        token = tknFlow.showToken();
+        tknFlow.getToken();
         std::cout<<token.getStringNum()<<" "<<token.getClassNum()<<" ";
         if (token.hasSubClass()){
             std::cout<<token.getSubClassNum()<<" ";
