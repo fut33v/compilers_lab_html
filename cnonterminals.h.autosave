@@ -1,0 +1,16 @@
+#ifndef CNONTERMINAL_H
+#define CNONTERMINAL_H
+
+namespace parser {
+    class cNonTerminals{
+    public:
+        cNonTerminals();
+        
+        void Head();
+        
+    private:
+
+    };
+}
+
+#endif // CNONTERMINAL_H
