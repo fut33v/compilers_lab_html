@@ -3,8 +3,6 @@
 # Project created by QtCreator 2013-12-13T00:30:09
 #
 #-------------------------------------------------
-#QT       += core
-
 QT       -= gui
 
 TARGET = compilers_lab_02
@@ -17,9 +15,13 @@ TEMPLATE = app
 
 SOURCES +=  main.cpp \
     ctoken.cpp \
-    ctokensflow.cpp
+    ctokensflow.cpp \
+    cpredictiveparser.cpp \
+    cnonterminals.cpp
 
 HEADERS += \
     ctoken.h \
     parser.h \
-    ctokensflow.h
+    ctokensflow.h \
+    cpredictiveparser.h \
+    cnonterminals.h
