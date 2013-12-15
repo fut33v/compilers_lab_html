@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace parser {
+namespace scanner {
     class cToken{
     public:
         cToken();

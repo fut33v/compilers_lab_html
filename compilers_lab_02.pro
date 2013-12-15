@@ -20,10 +20,9 @@ SOURCES += \
     scanner/cconstrecognizer.cpp \
     scanner/cwordrecognizer.cpp \
     scanner/cscanner.cpp \
+    scanner/ctoken.cpp \
+    scanner/ctokensflow.cpp \
     parser/main.cpp \
-    parser/ctoken.cpp \
-    parser/ctokensflow.cpp \
-    parser/cpredictiveparser.cpp \
     parser/cnonterminals.cpp \
     parser/cllparser.cpp
 
@@ -35,10 +34,9 @@ HEADERS += \
     scanner/cconstrecognizer.h \
     scanner/cwordrecognizer.h \
     scanner/cscanner.h \
-    parser/ctoken.h \
+    scanner/ctoken.h \
+    scanner/ctokensflow.h \
     parser/parser.h \
-    parser/ctokensflow.h \
-    parser/cpredictiveparser.h \
     parser/cnonterminals.h \
     parser/cllparser.h
 

@@ -5,17 +5,17 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
-#include "ctokensflow.h"
+#include "scanner/ctokensflow.h"
 #include "parser.h"
 
 namespace parser {
     class cLLParser{
     public:
-        cLLParser(cTokensFlow* tokensFlow, std::string tableFname);
+        cLLParser(scanner::cTokensFlow* tokensFlow, std::string tableFname);
         void showTable();
         void initParser();
     private:
-        cTokensFlow* tokensFlow;
+        scanner::cTokensFlow* tokensFlow;
         std::stack<int> stack;
         table_of_parsing_t parsingTable;
         int numOfProductions;

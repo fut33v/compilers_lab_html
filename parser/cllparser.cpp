@@ -1,7 +1,7 @@
 #include "cllparser.h"
 
 namespace parser{
-    cLLParser::cLLParser(cTokensFlow* tokensFlow, std::string tableFname){
+    cLLParser::cLLParser(scanner::cTokensFlow* tokensFlow, std::string tableFname){
         this->tokensFlow = tokensFlow;
         numOfProductions = 0;
         std::ifstream file (tableFname.c_str(), std::ifstream::in);

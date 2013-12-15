@@ -37,7 +37,7 @@ namespace scanner{
         }
     }
     int cCode::getStrNum(){
-        return CurrentStrNum;
+        return CurrentStrNum+1;
     }
 }
 

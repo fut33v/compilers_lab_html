@@ -1,6 +1,6 @@
 #include "ctoken.h"
 
-namespace parser {
+namespace scanner {
     cToken::cToken(){
         this->stringNum = 0;
         this->classNum = 0;
