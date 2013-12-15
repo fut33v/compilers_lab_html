@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-12-13T00:30:09
+# Project created by Ilya Fateev
 #
 #-------------------------------------------------
 QT       -= gui
@@ -13,15 +13,33 @@ QMAKE_CXXFLAGS += -std=c++11
 
 TEMPLATE = app
 
-SOURCES +=  main.cpp \
-    ctoken.cpp \
-    ctokensflow.cpp \
-    cpredictiveparser.cpp \
-    cnonterminals.cpp
+# Lexeme scanner sources ##########
+# Parser sources ##########
+SOURCES += \
+    scanner/ccode.cpp \
+    scanner/cconstrecognizer.cpp \
+    scanner/cwordrecognizer.cpp \
+    scanner/cscanner.cpp \
+    parser/main.cpp \
+    parser/ctoken.cpp \
+    parser/ctokensflow.cpp \
+    parser/cpredictiveparser.cpp \
+    parser/cnonterminals.cpp \
+    parser/cllparser.cpp
 
+
+#Lexeme scanner headers ##########
+#Parser headers ##########
 HEADERS += \
-    ctoken.h \
-    parser.h \
-    ctokensflow.h \
-    cpredictiveparser.h \
-    cnonterminals.h
+    scanner/ccode.h \
+    scanner/cconstrecognizer.h \
+    scanner/cwordrecognizer.h \
+    scanner/cscanner.h \
+    parser/ctoken.h \
+    parser/parser.h \
+    parser/ctokensflow.h \
+    parser/cpredictiveparser.h \
+    parser/cnonterminals.h \
+    parser/cllparser.h
+
+

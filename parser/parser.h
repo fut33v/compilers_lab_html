@@ -6,6 +6,7 @@
 
 namespace parser{
     typedef std::vector<std::string> token_flow_t;
+    typedef std::vector<std::vector<int>> table_of_parsing_t;
 }
 
 #endif // TOKEN_H

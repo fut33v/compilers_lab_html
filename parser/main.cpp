@@ -2,9 +2,11 @@
 #include "ctokensflow.h"
 #include "ctoken.h"
 #include "parser.h"
+#include "cllparser.h"
+#include "scanner/ccode.h"
 
 int main(){
-    parser::cTokensFlow tknFlow("tokens");
+    /*parser::cTokensFlow tokensFlow("tokens");
     while (!tknFlow.isEnd()){
         parser::cToken token;
         token = tknFlow.showToken();
@@ -14,6 +16,11 @@ int main(){
             std::cout<<token.getSubClassNum()<<" ";
         }
         std::cout<<token.getValue()<<std::endl;
-    }
+    }*/
+
+    parser::cTokensFlow tokensFlow("tokens");
+    parser::cLLParser parser (&tokensFlow, "table");
+    parser.showTable();
+
     return 0;
 }
