@@ -11,6 +11,7 @@ namespace scanner{
         cConstRecognizer Const(&code);
         cWordRecognizer Word("reserved.words", &code);
         std::string Token;
+        //cToken token;
         while(!code.IsEnd()){
             char ch = code.ShowCh();
             if(((int)ch >= DIGIT_ASCII_LOWER_LIMIT && (int)ch <= DIGIT_ASCII_UPPER_LIMIT) || (ch == '\'') || (ch == '#')){
@@ -19,14 +20,7 @@ namespace scanner{
                 tokensFlow->addToken(cToken(code.getStrNum(), Class, Token));
             } else if(((int)ch >= LETTER_LOWERCASE_ASCII_LOWER_LIMIT && (int)ch <= LETTER_LOWERCASE_ASCII_UPPER_LIMIT) ||
             ((int)ch >= LETTER_UPPERCASE_ASCII_LOWER_LIMIT && (int)ch <= LETTER_UPPERCASE_ASCII_UPPER_LIMIT) || (ch == '_') || (ch == '<')){
-                std::list<std::pair<std::pair<int,int>, std::string> > classAndToken;
-                Word.getClass(&classAndToken);
-                for (auto it : classAndToken){
-                    tokensFlow->addToken(cToken(code.getStrNum(), it.first.first, it.first.second, it.second));
-                }
-                while (!classAndToken.empty()){
-                    classAndToken.pop_back();
-                }
+                tokensFlow->addToken(Word.getToken());
             } else if(ch == ' ' || ch == '\n' || ch == '\t'){
                 code.GiveCh();
             }

@@ -53,7 +53,7 @@ namespace scanner{
             ch = code->ShowCh();
             int i = CharToInd(ch);
             if(i >= 0){
-                if (((i == 63) || (ch == ' ')) && (it != 0)){
+                if (((ch== '<' || (ch == ' ') || (ch == '>'))) && (it != 0)){
                     break;
                 }
                 Token += ch;
@@ -66,7 +66,7 @@ namespace scanner{
         return true;
     }
 
-    void cWordRecognizer::getClass(std::list<std::pair<std::pair<int,int>, std::string>> * classAndToken){
+    cToken cWordRecognizer::getToken(){
         state *currState = startState;
         Token = "";
         if (takeWord()){
@@ -75,49 +75,25 @@ namespace scanner{
                     for(size_t i = 0; i < Token.length(); i++){
                         int ind = CharToInd(Token[i]);
                         if(currState->st[ind] == NULL){
-                            classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                            (std::pair<int, int>(CLASS_ERROR, 0), Token));
-                            return;
+                            return cToken(code->getStrNum(), CLASS_ERROR, Token);
                         }
                         currState = currState->st[ind];
                     }
-                    classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                    ( std::pair<int, int>(currState->Class, currState->subClass), Token));
-                    return;
+                    //Closing TAG
+                    return cToken(code->getStrNum(), currState->Class, currState->subClass, Token);
                 } else {
-                    for (size_t i = 0; i < Token.length()-1; i++){
-                        Token[i] = Token[i+1];
-                    }
-                    Token.pop_back();
-                    classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                    (std::pair<int, int>(CLASS_BRACKET, 1), "<"));
-                    for(size_t i = 0; i < Token.length();i++){
+                    for(size_t i = 1; i < Token.length();i++){
                         int ind = CharToInd(Token[i]);
                         if (((i != Token.length()-1) && (ind > 62) && (ind < 66))){
-                            classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                            (std::pair<int, int>(CLASS_ERROR, 0), Token));
-                            return;
-                        }
-                        if ((i == Token.length()-1) && (currState->Class == 1) || (currState->Class == 2)){
-                            if (ind == 64){
-                                Token.pop_back();
-                            }
-                            classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                            ( std::pair<int, int>(currState->Class, currState->subClass), Token));
-                            classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                            ( std::pair<int, int>(CLASS_BRACKET, 2), ">"));
-                            return;
+                            return cToken(code->getStrNum(), CLASS_ERROR, Token);
                         }
                         if(currState->st[ind] == NULL){
-                            classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                            (std::pair<int, int>(CLASS_ERROR, 0), Token));
-                            return;
+                            return cToken(code->getStrNum(), CLASS_ERROR, Token);
                         }
                         currState = currState->st[ind];
-                        if ((i == Token.length()-1) && (currState->Class == 1) || (currState->Class == 2)){
-                            classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                            ( std::pair<int, int>(currState->Class, currState->subClass), Token));
-                            return;
+                        if (((i == Token.length()-1) && (currState->Class == CLASS_TAG_NAMES)) ||
+                        (currState->Class == CLASS_TAG_CLOSING)){
+                            return cToken(code->getStrNum(), currState->Class, currState->subClass, Token);
                         }
                     }
                 }
@@ -125,8 +101,7 @@ namespace scanner{
                 for(size_t i = 0; i < Token.length(); i++){
                     int ind = CharToInd(Token[i]);
                     if ((i != Token.length()-1) && (ind > 62) && (ind < 66)){
-                        classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                        ( std::pair<int, int>(CLASS_ERROR, 0), Token));
+                        return cToken(code->getStrNum(), CLASS_ERROR, Token);
                     }
                     if(currState->st[ind] == NULL){
                         currState->st[ind] = new state();
@@ -138,17 +113,11 @@ namespace scanner{
                 }
                 if(currState->Class == CLASS_IDENTIFICATOR){
                     currState->subClass = idCounter++;
-                    classAndToken->push_back(std::pair<std::pair<int, int>, std::string>
-                    (std::pair<int, int>(CLASS_IDENTIFICATOR, idCounter), Token));
+                    return cToken(code->getStrNum(), CLASS_IDENTIFICATOR, idCounter, Token);
                 }
             }
-        } else {
-            return;
         }
-    }
-
-    std::string cWordRecognizer::getToken(){
-        return Token;
+        return cToken(code->getStrNum(), CLASS_ERROR, Token);
     }
 
     int cWordRecognizer::CharToInd(char ch){

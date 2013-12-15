@@ -7,13 +7,13 @@
 #include <iostream>
 #include <cstdlib>
 #include "ccode.h"
+#include "ctoken.h"
 
 namespace scanner{
     class cWordRecognizer{
     public:
         cWordRecognizer(std::string, cCode*);
-        void getClass(std::list<std::pair<std::pair<int,int>, std::string>> *);
-        std::string getToken();
+        cToken getToken();
     private:
         std::string Token;
         std::set<char> availableCh;
