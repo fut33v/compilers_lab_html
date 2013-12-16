@@ -17,6 +17,7 @@ namespace scanner {
         void addToken(cToken token);
         cToken getToken();
         cToken showToken();
+        void toStart();
         bool isEnd();
     private:
         token_flow_t FlowOfTokens;

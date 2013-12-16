@@ -79,6 +79,12 @@ namespace scanner{
                         }
                         currState = currState->st[ind];
                     }
+                    if (code->ShowCh() == '>'){
+                        code->GiveCh();
+                        Token.push_back('>');
+                        int ind = CharToInd('>');
+                        currState = currState->st[ind];
+                    }
                     //Closing TAG
                     return cToken(code->getStrNum(), currState->Class, currState->subClass, Token);
                 } else {

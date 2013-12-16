@@ -3,7 +3,7 @@ namespace scanner{
     cCode::cCode(std::string FileName){
         std::ifstream file(FileName.c_str(), std::ifstream::in);
         if(!file){
-            std::cout<<"Error opening file";
+            std::cout<<"Error opening file "<<FileName<<std::endl;
             exit(1);
         }
         file.seekg(0, std::ios::end);

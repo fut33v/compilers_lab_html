@@ -23,6 +23,10 @@ namespace scanner {
         return FlowOfTokens[currentToken];
     }
 
+    void cTokensFlow::toStart(){
+        currentToken = 0;
+    }
+
     bool cTokensFlow::isEnd(){
         if (currentToken >= numOfTokens){
             return true;
