@@ -18,6 +18,7 @@ namespace scanner {
         int stringNum;
         int classNum;
         int subClassNum;
+        //int stackSymbol;
         std::string value;
         bool subClassExist;
     };

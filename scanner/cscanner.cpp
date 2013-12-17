@@ -1,4 +1,5 @@
 #include "cscanner.h"
+//#include "parser/parser.h"
 
 namespace scanner{
     cScanner::cScanner(std::string codeFile, cTokensFlow* tokensFlow){
@@ -35,11 +36,6 @@ namespace scanner{
                     case '>': {
                         Token = ">";
                         tokensFlow->addToken(cToken(code.getStrNum(), CLASS_BRACKET, Token));
-                        break;
-                    }
-                    case '/': {
-                        Token = "/";
-                        tokensFlow->addToken(cToken(code.getStrNum(), CLASS_ERROR, Token));
                         break;
                     }
                 }

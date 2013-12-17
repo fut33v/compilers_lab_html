@@ -1,21 +1,17 @@
 #ifndef CPRODUCTION_H
 #define CPRODUCTION_H
 #include "scanner/ctoken.h"
-#include "cstackelement.h"
 #include "parser.h"
 
 namespace parser{
-    typedef std::vector<cStackElement> production_t;
-    class cProduction
-    {
+    //typedef std::vector<int> production_t;
+    class cProduction : public std::vector<int>{
     public:
         cProduction(int productionNumber);
-        void addStackElem(cStackElement element);
-        parser::production_t getProduction();
         void setNumber(int number);
+        int getNumber();
     private:
         int productionNumber;
-        production_t production;
     };
 }
 #endif // CPRODUCTION_H

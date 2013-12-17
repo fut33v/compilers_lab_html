@@ -6,6 +6,7 @@
 #include "cconstrecognizer.h"
 #include "cwordrecognizer.h"
 #include "ctokensflow.h"
+#include "parser/parser.h"
 
 namespace scanner{
     class cScanner{

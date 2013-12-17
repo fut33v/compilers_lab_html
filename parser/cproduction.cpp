@@ -4,15 +4,18 @@ namespace parser{
         this->productionNumber = productionNumber;
     }
 
-    cProduction::addStackElem(cStackElement element){
-        production.push_back(element);
-    }
-
-    production_t cProduction::getProduction(){
-        return production;
-    }
-
     void cProduction::setNumber(int number){
         this->productionNumber = number;
     }
+
+
+    int cProduction::getNumber(){
+        return this->productionNumber;
+    }
+
+    /*void cProduction::clearProduction(){
+        for (auto it : this){
+            it->pop_back();
+        }
+    }*/
 }

@@ -7,19 +7,20 @@
 #include <cstring>
 #include "scanner/ctoken.h"
 #include "scanner/ctokensflow.h"
-#include "cstackelement.h"
 #include "parser.h"
 
 namespace parser {
+    typedef std::vector<cProduction> productions_list_t;
     class cLLParser{
     public:
         cLLParser(scanner::cTokensFlow* tokensFlow, std::string tableFname);
-        void showTable();
         void initParser();
         void startParsing();
+        void showTable();
+        void showProductions();
     private:
         scanner::cTokensFlow* tokensFlow;
-        std::stack<cStackElement> stack;
+        std::stack<int> stack;
         table_of_parsing_t parsingTable;
         productions_list_t productionsList;
         int numOfNonTerminals;
@@ -27,12 +28,13 @@ namespace parser {
         void fillTable();
         void fillProductions();
         int tokenToColumn(scanner::cToken* token);
+        int tokenToStackSymb(scanner::cToken* token);
         enum {
             BUF_SIZE = 256,
             NUM_OF_PRODUCTIONS = 33,
             MAGIC_NUMBER = 8
         };
-        enum stackSymbols {
+        /*enum stackSymbols {
             HTML,
             WebpageBody,
             Head,
@@ -75,7 +77,7 @@ namespace parser {
             tInt, //CLASS_INT
             tColor, //CLASS_COLOR
             tString //CLASS_STRING
-        };
+        };*/
         enum tokenClasses {
             CLASS_ERROR,
             CLASS_OPENING_TAGS,

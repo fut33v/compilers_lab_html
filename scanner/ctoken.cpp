@@ -13,6 +13,7 @@ namespace scanner {
         this->subClassNum = subClassNum;
         this->value = value;
         this->subClassExist = true;
+        //this->stackSymbol = stackSymbol;
     }
 
     cToken::cToken(int stringNum, int classNum, std::string value){
@@ -20,6 +21,7 @@ namespace scanner {
         this->classNum = classNum;
         this->value = value;
         this->subClassExist = false;
+        //this->stackSymbol = stackSymbol;
     }
 
     int cToken::getStringNum(){
