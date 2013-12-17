@@ -5,7 +5,9 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
+#include "scanner/ctoken.h"
 #include "scanner/ctokensflow.h"
+#include "cstackelement.h"
 #include "parser.h"
 
 namespace parser {
@@ -16,37 +18,21 @@ namespace parser {
         void initParser();
         void startParsing();
     private:
-        void performProduction(int production);
         scanner::cTokensFlow* tokensFlow;
-        std::stack<int> stack;
+        std::stack<cStackElement> stack;
         table_of_parsing_t parsingTable;
+        productions_list_t productionsList;
         int numOfNonTerminals;
+        std::string tableFname;
+        void fillTable();
+        void fillProductions();
+        int tokenToColumn(scanner::cToken* token);
         enum {
-            BUF_SIZE = 256
+            BUF_SIZE = 256,
+            NUM_OF_PRODUCTIONS = 33,
+            MAGIC_NUMBER = 8
         };
-        enum tableColumns {
-            tSTRING, //8 CLASS_STRING
-            tID, //5 CLASS_ID
-            tEMPTY, //???
-            tCOLOR, //7 CLASS_COLOR
-            tINT, //6 CLASS_INT
-            tEQUAL, //4 CLASS_EQUAL_SIGN
-            tHtml, //1 1 CLASS_OPENING_TAGS
-            tHead, //1 2 -/-
-            tTitle, //1 3 -/-
-            tMeta, //1 4 -/-
-            tLink, //1 6 -/-
-            tBase, //1 5 -/-
-            tBasefont, //1 7 -/-
-            tBody, //1 8 -/-
-            tImg, //1 9 -/-
-            tBr, //1 10 -/-
-            tP, //1 11 -/-
-            tH1, //1 12 -/-
-            tH2, //1 13 -/-
-            tH3 //1 14 -/-
-        };
-        enum nonTerminals {
+        enum stackSymbols {
             HTML,
             WebpageBody,
             Head,
@@ -60,7 +46,35 @@ namespace parser {
             Parameter,
             Tag,
             Word,
-            BottomMarker
+            BottomMarker,
+            oHtml, //<html
+            oHead, //<head
+            oTitle, //<title e.t.c
+            oMeta,
+            oBase,
+            oLink,
+            oBasefont,
+            oBody,
+            oImg,
+            oBr,
+            oP,
+            oH1,
+            oH2,
+            oH3,
+            cHtml, //</html> and so on
+            cHead,
+            cTitle,
+            cBody,
+            cH1,
+            cH2,
+            cH3,
+            cP,
+            tAbove, //CLASS_CLOSING_BRACE
+            tId, //CLASS_ID
+            tEqual, //CLASS_EQUAL
+            tInt, //CLASS_INT
+            tColor, //CLASS_COLOR
+            tString //CLASS_STRING
         };
         enum tokenClasses {
             CLASS_ERROR,
@@ -74,30 +88,20 @@ namespace parser {
             CLASS_STRING
         };
         enum openingTags {
-            oHtml = 1,
-            oHead,
-            oTitle,
-            oMeta,
-            oBase,
-            oLink,
-            oBasefont,
-            oBody,
-            oImg,
-            oBr,
-            oP,
-            oH1,
-            oH2,
-            oH3
-        };
-        enum closingTags {
-            cHtml = 1,
-            cHead,
-            cTitle,
-            cBody,
-            cH1,
-            cH2,
-            cH3,
-            cP
+            html = 1,
+            head,
+            title,
+            meta,
+            base,
+            link,
+            basefont,
+            body,
+            img,
+            br,
+            p,
+            h1,
+            h2,
+            h3
         };
     };
 }

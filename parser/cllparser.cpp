@@ -3,6 +3,36 @@
 namespace parser{
     cLLParser::cLLParser(scanner::cTokensFlow* tokensFlow, std::string tableFname){
         this->tokensFlow = tokensFlow;
+        this->tableFname = tableFname;
+        fillTable();
+    }
+
+    void cLLParser::initParser(){
+        while(!stack.empty()){
+            stack.pop();
+        }
+        stack.push(cStackElement(BottomMarker, false));
+        stack.push(cStackElement(HTML, false));
+    }
+
+    void cLLParser::startParsing(){
+        while (!tokensFlow->isEnd()){
+            scanner::cToken token;
+            token = tokensFlow->showToken();
+            cStackElement top = stack.top();
+            if (top.isTerminal){
+
+            } else {
+
+            }
+           // parsingTable[][];
+
+            tokensFlow->getToken();
+
+        }
+    }
+
+    void cLLParser::fillTable(){
         numOfNonTerminals = 0;
         std::ifstream file (tableFname.c_str(), std::ifstream::in);
         if (!file){
@@ -32,82 +62,11 @@ namespace parser{
         }
     }
 
-    void cLLParser::initParser(){
-        while(!stack.empty()){
-            stack.pop();
-        }
-        stack.push(BottomMarker);
-        stack.push(HTML);
-    }
-
-    void cLLParser::startParsing(){
-        while (!tokensFlow->isEnd()){
-            scanner::cToken token;
-            int production;
-            token = tokensFlow->showToken();
-            switch(token.getClassNum()){
-                case CLASS_STRING: {
-                    production = parsingTable[stack.top()][tSTRING];
-                    break;
-                }
-                case CLASS_OPENING_TAGS: {
-                switch(token.getSubClassNum())
-                    case oHtml: {
-                        production = parsingTable[stack.top()][tHtml];
-                        break;
-                    }
-                    case oHead: {
-                        production = parsingTable[stack.top()][tHead];
-                        break;
-                    }
-                    case oTitle: {
-                        production = parsingTable[stack.top()][tTitle];
-                        break;
-                    }
-                    case oMeta: {
-                        production = parsingTable[stack.top()][tMeta];
-                        break;
-                    }
-                    case oBase: {
-                        production = parsingTable[stack.top()][tBase];
-                        break;
-                    }
-                    case oLink: {
-                        production = parsingTable[stack.top()][tLink];
-                        break;
-                    }
-                    case oBasefont: {
-                        production = parsingTable[stack.top()][tBasefont];
-                        break;
-                    }
-                    case oBody: {
-                        production = parsingTable[stack.top()][tBody];
-                        break;
-                    }/*
-                    case oHead: {
-                        production = parsingTable[stack.top()][tHead];
-                    }*/ // @TODO other opening tags, shiiit
-
-                }
-
-            }
-            tokensFlow->getToken();
-
-        }
-    }
-
-    void cLLParser::performProduction(int production){
-        switch (production){
-            case 1:{
-
-            }
-            case 2:{
-
-            }
-            case 3:{
-
-            }
-        }
+    void cLLParser::fillProductions(){
+        cProduction p(1);
+        cStackElement sEl(oHtml, true);
+        p.addStackElem(sEl);
+        productionsList.push_back(sEl);
     }
 
     void cLLParser::showTable(){
@@ -119,6 +78,71 @@ namespace parser{
             }
             std::cout<<std::endl;
         }
+    }
 
+    int cLLParser::tokenToColumn(scanner::cToken* token){
+        switch(token->getClassNum()){
+            case CLASS_STRING: {
+                return 0;
+            }
+            case CLASS_ID: {
+                return 1;
+            }
+            case CLASS_COLOR: {
+                return 3;
+            }
+            case CLASS_INT: {
+                return 4;
+            }
+            case CLASS_EQUAL_SIGN: {
+                return 5;
+            }
+            case CLASS_OPENING_TAGS: {
+                switch(token->getSubClassNum()){
+                    case html: {
+                        return 6;
+                    }
+                    case head: {
+                        return 7;
+                    }
+                    case title: {
+                        return 8;
+                    }
+                    case meta: {
+                        return 9;
+                    }
+                    case link: {
+                        return 10;
+                    }
+                    case base: {
+                        return 11;
+                    }
+                    case basefont: {
+                        return 12;
+                    }
+                    case body: {
+                        return 13;
+                    }
+                    case img: {
+                        return 14;
+                    }
+                    case br: {
+                        return 15;
+                    }
+                    case p: {
+                        return 16;
+                    }
+                    case h1: {
+                        return 17;
+                    }
+                    case h2: {
+                        return 18;
+                    }
+                    case h3: {
+                        return 19;
+                    }
+                }
+            }
+        }
     }
 }

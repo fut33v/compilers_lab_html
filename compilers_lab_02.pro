@@ -23,8 +23,9 @@ SOURCES += \
     scanner/ctoken.cpp \
     scanner/ctokensflow.cpp \
     parser/main.cpp \
-    parser/cnonterminals.cpp \
-    parser/cllparser.cpp
+    parser/cllparser.cpp \
+    parser/cproduction.cpp \
+    parser/cstackelement.cpp
 
 
 #Lexeme scanner headers ##########
@@ -37,7 +38,8 @@ HEADERS += \
     scanner/ctoken.h \
     scanner/ctokensflow.h \
     parser/parser.h \
-    parser/cnonterminals.h \
-    parser/cllparser.h
+    parser/cllparser.h \
+    parser/cproduction.h \
+    parser/cstackelement.h
 
 
