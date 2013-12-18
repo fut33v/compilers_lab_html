@@ -23,9 +23,6 @@ int main(){
     tokensFlow.toStart();*/
     parser::cLLParser parser(&tokensFlow);
     parser.initParser();
-    //parser.showTable();
-    //parser.showProductions();
-    //std::cout<<"Parsing..."<<std::endl;
     parser.startParsing();
     return 0;
 }

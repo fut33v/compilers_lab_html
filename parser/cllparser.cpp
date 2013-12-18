@@ -21,6 +21,7 @@ namespace parser{
             scanner::cToken token;
             token = tokensFlow->showToken();
             std::cout<<"Token: "<<token.getValue()<<std::endl;
+            //sleep(1);
             if (token.getClassNum()== CLASS_ERROR){
                 std::cout<<"String has NOT passed the validation (wrong token)!!!";
                 return;
@@ -31,13 +32,13 @@ namespace parser{
             if (top > BottomMarker){
                 if (top == tokenToStackSymb(&token)){
                     stack.pop();
-                    std::cout<<"Token DELETE: "<<token.getValue()<<" top: "<<stack.top()<<std::endl;
+                    std::cout<<"Token "<<token.getValue()<<" has been deleted, stack.top: "
+                            <<stackSymbolsString[stack.top()]<<std::endl;
                     if (stack.top() == BottomMarker){
                         std::cout<<"String has PASSED the validation!!!"<<std::endl;
                         return;
                     }
-                    tokensFlow->getToken();
-                    //std::cout<<":"<<stack.top()<<std::endl;
+                    tokensFlow->getToken();                    
                 } else {
                     std::cout<<"String has NOT passed the validation!!! " << top << " "
                             << token.getValue() << " " << tokenToStackSymb(&token);
@@ -45,8 +46,9 @@ namespace parser{
                 }
             } else if (top != BottomMarker){
                 int production = parsingTable[top][tokenToColumn(&token)];
-                std::cout<<"PRODUCTION: "<<production<<" for "<< stackSymbolsString[top] <<std::endl;
-                if (production != 0){
+                std::cout<<"row:"<<top<<"column:"<<tokenToColumn(&token);
+                std::cout<<"Production "<<production<<" for "<< stackSymbolsString[top] <<std::endl;
+                if (production > 0 && production < 33){
                     for (auto it : productionsList){
                         if (it.getNumber() == production){
                             stack.pop();
@@ -59,9 +61,8 @@ namespace parser{
                     }
                 } else {
                     if (parsingTable[top][tEmpty] != 0){
-                        std::cout<<"Nullify production for "<< top <<std::endl;
+                        std::cout<<"Nullify production for "<< stackSymbolsString[top] <<std::endl;
                         stack.pop();
-                        //tokensFlow->getToken();
                     } else {
                         std::cout<<"String has NOT passed the validation!!! (no production)";
                         return;
@@ -69,16 +70,13 @@ namespace parser{
                 }
             }
         }
-        /*if (stack.top() == BottomMarker){
-            std::cout<<"СЧАСТЬЕ ЕДИНОРОГИ"<<std::endl;
-        }*/
     }
 
     void cLLParser::fillTable(){
         parsingTable = {
             //STRING	id	EMPTY	COLOR	INT	=	<html	<head	<title	<meta	<link	<base	<basefont	<body	<img	<br	<p	<h1	<h2	<h3	-|
             {0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<HTML>
-            {0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<WebpageBody>
+            {0,	0,	2,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<WebpageBody>
             {0,	0,	4,	0,	0,	0,	0,	3,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Head>
             {0,	0,	6,	0,	0,	0,	0,	0,	5,	5,	5,	5,	5,	0,	0,	0,	0,	0,	0,	0,	0}, //<HeadItems>
             {0,	0,	0,	0,	0,	0,	0,	0,	7,	8,	9,	10,	11,	0,	0,	0,	0,	0,	0,	0,	0}, //<HeadItem>
@@ -87,9 +85,9 @@ namespace parser{
             {16,16,	17,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameters>
             {19,18,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter1>
             {0,	0,	21,	0,	0,	20,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter2>
-            {22,24,	26,	23,	25,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter>
-            {0,	0,	0,	0,	0,	0,  0,	0,	0,	0,	0,	0,	0,	0,	27,	28,	29,	30,	31,	32,	0}, //<Tag>
-            {33,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}  //<Word>
+            {22,24,	0,	23,	25,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter>
+            {0,	0,	0,	0,	0,	0,  0,	0,	0,	0,	0,	0,	0,	0,	26,	27,	28,	29,	30,	31,	0}, //<Tag>
+            {32,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}  //<Word>
         };
     }
 
@@ -103,7 +101,7 @@ namespace parser{
         p.push_back(cHtml);
         productionsList.push_back(p);
         p.clear();
-        //2) <WebpageBody> -> <Head><Body> {‘<head’}
+        //2) <WebpageBody> -> <Head><Body> {‘<head’, EMPTY}
         p.setNumber(2);
         p.push_back(Head);
         p.push_back(Body);
@@ -190,9 +188,6 @@ namespace parser{
         p.clear();
 
         //15) <Content> -> EMPTY {EMPTY}
-        //???
-        //productionsList.push_back(p);
-        //p.clear();
 
         //16) <Parameters> -> <Parameter1><Parameters> {id, STRING}
         p.setNumber(16);
@@ -240,7 +235,7 @@ namespace parser{
         p.clear();
         //25) <Parameter> -> INT {INT}
         p.setNumber(25);
-        p.push_back(tId);
+        p.push_back(tInt);
         productionsList.push_back(p);
         p.clear();
         //26) <Tag> -> ‘<img’ <Parameters> ‘>’ {‘<img’}
@@ -383,6 +378,10 @@ namespace parser{
             }
             case CLASS_OPENING_TAGS: {
                 return token->getSubClassNum()-8;
+            }
+            case CLASS_CLOSING_TAGS: {
+                std::cout<<"РОТ ЕБАЛ";
+                return -1;
             }
         }
         return -1;

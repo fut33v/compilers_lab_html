@@ -4,7 +4,9 @@
 #include <stack>
 #include <fstream>
 #include <iostream>
-#include <cstring>
+//#include <cstring>
+//#include <cstdlib>
+#include "unistd.h"
 #include "scanner/ctoken.h"
 #include "scanner/ctokensflow.h"
 #include "parser.h"

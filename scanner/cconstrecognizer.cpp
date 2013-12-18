@@ -31,7 +31,7 @@ namespace scanner{
         bool brk = false;
         while(!code->IsEnd() && (brk != true)){
             ch = code->GiveCh();
-            if ((ch == '\'') || (ch == ' ') || (ch == '\n')){
+            if ((ch == '\'') /*|| (ch == ' ')*/ || (ch == '\n')){
                 brk = true;
             }
             if (!brk){
