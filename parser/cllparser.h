@@ -32,52 +32,9 @@ namespace parser {
         enum {
             BUF_SIZE = 256,
             NUM_OF_PRODUCTIONS = 33,
-            MAGIC_NUMBER = 8
+            MAGIC_NUMBER = 8,
+            tEmpty = 2
         };
-        /*enum stackSymbols {
-            HTML,
-            WebpageBody,
-            Head,
-            HeadItems,
-            HeadItem,
-            Body,
-            Content,
-            Parameters,
-            Parameter1,
-            Equal,
-            Parameter,
-            Tag,
-            Word,
-            BottomMarker,
-            oHtml, //<html
-            oHead, //<head
-            oTitle, //<title e.t.c
-            oMeta,
-            oBase,
-            oLink,
-            oBasefont,
-            oBody,
-            oImg,
-            oBr,
-            oP,
-            oH1,
-            oH2,
-            oH3,
-            cHtml, //</html> and so on
-            cHead,
-            cTitle,
-            cBody,
-            cH1,
-            cH2,
-            cH3,
-            cP,
-            tAbove, //CLASS_CLOSING_BRACE
-            tId, //CLASS_ID
-            tEqual, //CLASS_EQUAL
-            tInt, //CLASS_INT
-            tColor, //CLASS_COLOR
-            tString //CLASS_STRING
-        };*/
         enum tokenClasses {
             CLASS_ERROR,
             CLASS_OPENING_TAGS,

@@ -10,9 +10,8 @@ namespace scanner{
     void cScanner::startScanning(){
         cCode code(codeFile);
         cConstRecognizer Const(&code);
-        cWordRecognizer Word("reserved.words", &code);
+        cWordRecognizer Word(&code);
         std::string Token;
-        //cToken token;
         while(!code.IsEnd()){
             char ch = code.ShowCh();
             if(((int)ch >= DIGIT_ASCII_LOWER_LIMIT && (int)ch <= DIGIT_ASCII_UPPER_LIMIT) || (ch == '\'') || (ch == '#')){

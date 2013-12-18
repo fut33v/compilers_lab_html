@@ -18,66 +18,62 @@ namespace parser{
 
     void cLLParser::startParsing(){
         std::cout<<std::endl;
+        std::cout<<"asdasd"<<std::endl;
         while (!tokensFlow->isEnd()){
             scanner::cToken token;
             token = tokensFlow->showToken();
+            if (token.getClassNum()== CLASS_ERROR){
+                std::cout<<"String has NOT passed the validation (wrong token)!!!";
+                return;
+            }
             int top = stack.top();
-
             if (top > BottomMarker){
 
             } else if (top != BottomMarker){
                 int production = parsingTable[top][tokenToColumn(&token)];
-                for (auto it : productionsList){
-                    if (it.getNumber() == production){
-                        std::cout<<"production:"<<it.getNumber()<<std::endl;
-                        stack.pop();
-                        for (auto it2 : it){
-                            stack.push(it2);
-                            std::cout<<it2<<" ";
+                if (production != 0){
+                    for (auto it : productionsList){
+                        if (it.getNumber() == production){
+                            stack.pop();
+                            std::vector<int>::reverse_iterator it2;
+                            for (it2 = it.rbegin(); it2!= it.rend(); it2++){
+                                //std::cout<<"123 "<<*it2<<std::endl;
+                                stack.push(*it2);
+                            }
+                            tokensFlow->getToken();
+                            break;
                         }
-                        std::cout<<std::endl;
-                        break;
                     }
-
+                } else {
+                    if (parsingTable[top][tEmpty] != 0){
+                        stack.pop();
+                    } else {
+                        std::cout<<"String has NOT passed the validation!!!";
+                    }
                 }
             } else {
                 std::cout<<"String has passed the validation!!!";
             }
-           // parsingTable[][];
-
-            tokensFlow->getToken();
-
+            //tokensFlow->getToken();
         }
     }
 
     void cLLParser::fillTable(){
-        numOfNonTerminals = 0;
-        std::ifstream file (tableFname.c_str(), std::ifstream::in);
-        if (!file){
-            std::cout<<"Error with opening file: "<<tableFname<<std::endl;
-            exit(-1);
-        }
-        std::vector<int> lineVector;
-        char string[BUF_SIZE];
-        std::string String;
-        while (file.getline(string, BUF_SIZE)){
-            String = string;
-            String.append(" ");
-            memset(string, 0, BUF_SIZE);
-            for (auto it : String){
-                int n;
-                if ((it) == ' ' || it =='\t'){
-                    n = atoi(string);
-                    lineVector.push_back(n);
-                    memset(string, 0, BUF_SIZE);
-                } else {
-                    strncat(string, &it, 1);
-                }
-            }
-            parsingTable.push_back(lineVector);
-            lineVector.clear();
-            numOfNonTerminals++;
-        }
+        parsingTable = {
+            {0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<HTML>
+            {0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<WebpageBody>
+            {0,	0,	4,	0,	0,	0,	0,	3,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Head>
+            {0,	0,	6,	0,	0,	0,	0,	0,	5,	5,	5,	5,	5,	0,	0,	0,	0,	0,	0,	0,	0}, //<HeadItems>
+            {0,	0,	0,	0,	0,	0,	0,	0,	7,	8,	9,	10,	11,	0,	0,	0,	0,	0,	0,	0,	0}, //<HeadItem>
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	12,	0,	0,	0,	0,	0,	0,	0}, //<Body>
+            {14,0,	15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	13,	13,	13,	13,	13,	13,	0}, //<Content>
+            {16,16,	17,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameters>
+            {19,18,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter1>
+            {0,	0,	21,	0,	0,	20,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Equal>
+            {22,24,	26,	23,	25,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter>
+            {0,	0,	0,	0,	0,	0,  0,	0,	0,	0,	0,	0,	0,	0,	27,	28,	29,	30,	31,	32,	0}, //<Tag>
+            {33,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}  //<Word>
+        };
     }
 
     void cLLParser::fillProductions(){
@@ -313,8 +309,7 @@ namespace parser{
     }
 
     void cLLParser::showTable(){
-        std::cout<<"Parsing Table"<<std::endl;
-        std::cout<<"Number of nonterminals: "<<numOfNonTerminals<<std::endl;
+        std::cout<<"Parsing Table:"<<std::endl;
         for (auto it : parsingTable){
             for (auto it2 : it){
                 std::cout<<it2<<" ";
