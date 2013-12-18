@@ -1,7 +1,7 @@
 #include "cwordrecognizer.h"
 
 namespace scanner{
-    cWordRecognizer::cWordRecognizer(std::string reserveredFile, cCode *c){
+    cWordRecognizer::cWordRecognizer(cCode *c){
         idCounter = 0;
         startState = new state();
         if(c != NULL){
@@ -10,23 +10,28 @@ namespace scanner{
             std::cout<<"Error Code"<<std::endl;
             exit(1);
         }
-        std::ifstream file(reserveredFile.c_str(), std::ifstream::in);
-        if(!file){
-            std::cout<<"Error opening reserved file";
-            exit(-1);
-        }
-        int resWordClass = 0;
-        int resWordSubClass = 0;
-        while(!file.eof()){
-            std::string reserveredWord;
-            file >> reserveredWord;
-            file >> resWordClass;
-            file >> resWordSubClass;
-            if(reserveredWord.length() != 0){
-                addReserved(reserveredWord, resWordClass, resWordSubClass);
-           }
-        }
-        file.close();
+        addReserved("html", 1, 14);
+        addReserved("head", 1, 15);
+        addReserved("title", 1, 16);
+        addReserved("meta", 1, 17);
+        addReserved("base", 1, 18);
+        addReserved("link", 1, 19);
+        addReserved("basefont", 1, 20);
+        addReserved("body", 1, 21);
+        addReserved("img", 1, 22);
+        addReserved("br", 1, 23);
+        addReserved("p", 1, 24);
+        addReserved("h1", 1, 25);
+        addReserved("h2", 1, 26);
+        addReserved("h3", 1, 27);
+        addReserved("</html>", 1, 28);
+        addReserved("</head>", 1, 29);
+        addReserved("</title>", 1, 30);
+        addReserved("</body>", 1, 31);
+        addReserved("</h1>", 1, 32);
+        addReserved("</h2>", 1, 33);
+        addReserved("</h3>", 1, 34);
+        addReserved("</p>", 1, 35);
     }
 
     void cWordRecognizer::addReserved(std::string reserved, int Class, int subClass){

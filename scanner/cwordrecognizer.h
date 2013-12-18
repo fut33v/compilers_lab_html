@@ -12,7 +12,7 @@
 namespace scanner{
     class cWordRecognizer{
     public:
-        cWordRecognizer(std::string, cCode*);
+        cWordRecognizer(cCode*);
         cToken getToken();
     private:
         std::string Token;
