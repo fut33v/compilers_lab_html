@@ -1,9 +1,8 @@
 #include "cllparser.h"
 
 namespace parser{
-    cLLParser::cLLParser(scanner::cTokensFlow* tokensFlow, std::string tableFname){
+    cLLParser::cLLParser(scanner::cTokensFlow* tokensFlow){
         this->tokensFlow = tokensFlow;
-        this->tableFname = tableFname;
         fillTable();
     }
 
@@ -17,49 +16,61 @@ namespace parser{
     }
 
     void cLLParser::startParsing(){
-        std::cout<<std::endl;
-        std::cout<<"asdasd"<<std::endl;
         while (!tokensFlow->isEnd()){
             scanner::cToken token;
             token = tokensFlow->showToken();
+            std::cout<<"Token: "<<token.getValue()<<std::endl;
             if (token.getClassNum()== CLASS_ERROR){
                 std::cout<<"String has NOT passed the validation (wrong token)!!!";
                 return;
             }
-            int top = stack.top();
+            int top;
+            top = stack.top();
+            std::cout<<"Top: "<<top<<std::endl;
             if (top > BottomMarker){
-
+                if (top == tokenToStackSymb(&token)){
+                    std::cout<<"Token DELETE: "<<token.getValue()<<std::endl;
+                    tokensFlow->getToken();
+                    stack.pop();
+                } else {
+                    std::cout<<"String has NOT passed the validation!!! " << top << " "
+                            << token.getValue() << " " << tokenToStackSymb(&token);
+                    return;
+                }
             } else if (top != BottomMarker){
                 int production = parsingTable[top][tokenToColumn(&token)];
+                std::cout<<"PRODUCTION: "<<production<<" for "<< top <<std::endl;
                 if (production != 0){
                     for (auto it : productionsList){
                         if (it.getNumber() == production){
                             stack.pop();
                             std::vector<int>::reverse_iterator it2;
                             for (it2 = it.rbegin(); it2!= it.rend(); it2++){
-                                //std::cout<<"123 "<<*it2<<std::endl;
                                 stack.push(*it2);
                             }
-                            tokensFlow->getToken();
                             break;
                         }
                     }
                 } else {
                     if (parsingTable[top][tEmpty] != 0){
+                        std::cout<<"Аннулирующее для "<< top <<std::endl;
                         stack.pop();
                     } else {
-                        std::cout<<"String has NOT passed the validation!!!";
+                        std::cout<<"String has NOT passed the validation!!! (no production)";
+                        return;
                     }
                 }
-            } else {
-                std::cout<<"String has passed the validation!!!";
             }
-            //tokensFlow->getToken();
+        }
+        if (stack.top() == BottomMarker){
+            std::cout<<"СЧАСТЬЕ ЕДИНОРОГИ"<<std::endl;
+
         }
     }
 
     void cLLParser::fillTable(){
         parsingTable = {
+            //STRING	id	EMPTY	COLOR	INT	=	<html	<head	<title	<meta	<link	<base	<basefont	<body	<img	<br	<p	<h1	<h2	<h3	-|
             {0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<HTML>
             {0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<WebpageBody>
             {0,	0,	4,	0,	0,	0,	0,	3,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Head>
@@ -88,7 +99,7 @@ namespace parser{
         p.clear();
         //2) <WebpageBody> -> <Head><Body> {‘<head’}
         p.setNumber(2);
-        p.push_back(WebpageBody);
+        //p.push_back(WebpageBody);
         p.push_back(Head);
         p.push_back(Body);
         productionsList.push_back(p);
@@ -358,6 +369,9 @@ namespace parser{
             }
             case CLASS_EQUAL_SIGN: {
                 return tEqual;
+            }
+            case CLASS_CLOSING_BRACE: {
+                return tAbove;
             }
             case CLASS_OPENING_TAGS: {
                 return token->getSubClassNum();

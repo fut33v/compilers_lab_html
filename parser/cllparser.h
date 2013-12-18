@@ -13,7 +13,7 @@ namespace parser {
     typedef std::vector<cProduction> productions_list_t;
     class cLLParser{
     public:
-        cLLParser(scanner::cTokensFlow* tokensFlow, std::string tableFname);
+        cLLParser(scanner::cTokensFlow* tokensFlow);
         void initParser();
         void startParsing();
         void showTable();
@@ -23,8 +23,6 @@ namespace parser {
         std::stack<int> stack;
         table_of_parsing_t parsingTable;
         productions_list_t productionsList;
-        int numOfNonTerminals;
-        std::string tableFname;
         void fillTable();
         void fillProductions();
         int tokenToColumn(scanner::cToken* token);

@@ -13,18 +13,19 @@ int main(){
     /*while (!tokensFlow.isEnd()){
         scanner::cToken token;
         token = tokensFlow.showToken();
-        tokensFlow.getToken();
         std::cout<<token.getStringNum()<<" "<<token.getClassNum()<<" ";
         if (token.hasSubClass()){
             std::cout<<token.getSubClassNum()<<" ";
         }
         std::cout<<token.getValue()<<std::endl;
-    }*/
-    parser::cLLParser parser (&tokensFlow, "table");
-    //parser.showTable();
+        tokensFlow.getToken();
+    }
+    tokensFlow.toStart();*/
+    parser::cLLParser parser(&tokensFlow);
     parser.initParser();
+    //parser.showTable();
     //parser.showProductions();
-    std::cout<<"Parsing..."<<std::endl;
+    //std::cout<<"Parsing..."<<std::endl;
     parser.startParsing();
     return 0;
 }

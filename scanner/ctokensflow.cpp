@@ -15,7 +15,7 @@ namespace scanner {
     }
 
     cToken cTokensFlow::getToken(){
-        currentToken++;
+        ++currentToken;
         return FlowOfTokens[currentToken];
     }
 
