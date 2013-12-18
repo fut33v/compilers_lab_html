@@ -13,6 +13,7 @@ namespace parser{
         stack.push(BottomMarker);
         stack.push(HTML);
         fillProductions();
+        fillStackSymbolsString();
     }
 
     void cLLParser::startParsing(){
@@ -26,12 +27,17 @@ namespace parser{
             }
             int top;
             top = stack.top();
-            std::cout<<"Top: "<<top<<std::endl;
+            std::cout<<"Top: "<<stackSymbolsString[top]<<std::endl;
             if (top > BottomMarker){
                 if (top == tokenToStackSymb(&token)){
-                    std::cout<<"Token DELETE: "<<token.getValue()<<std::endl;
-                    tokensFlow->getToken();
                     stack.pop();
+                    std::cout<<"Token DELETE: "<<token.getValue()<<" top: "<<stack.top()<<std::endl;
+                    if (stack.top() == BottomMarker){
+                        std::cout<<"String has PASSED the validation!!!"<<std::endl;
+                        return;
+                    }
+                    tokensFlow->getToken();
+                    //std::cout<<":"<<stack.top()<<std::endl;
                 } else {
                     std::cout<<"String has NOT passed the validation!!! " << top << " "
                             << token.getValue() << " " << tokenToStackSymb(&token);
@@ -39,7 +45,7 @@ namespace parser{
                 }
             } else if (top != BottomMarker){
                 int production = parsingTable[top][tokenToColumn(&token)];
-                std::cout<<"PRODUCTION: "<<production<<" for "<< top <<std::endl;
+                std::cout<<"PRODUCTION: "<<production<<" for "<< stackSymbolsString[top] <<std::endl;
                 if (production != 0){
                     for (auto it : productionsList){
                         if (it.getNumber() == production){
@@ -53,8 +59,9 @@ namespace parser{
                     }
                 } else {
                     if (parsingTable[top][tEmpty] != 0){
-                        std::cout<<"Аннулирующее для "<< top <<std::endl;
+                        std::cout<<"Nullify production for "<< top <<std::endl;
                         stack.pop();
+                        //tokensFlow->getToken();
                     } else {
                         std::cout<<"String has NOT passed the validation!!! (no production)";
                         return;
@@ -62,10 +69,9 @@ namespace parser{
                 }
             }
         }
-        if (stack.top() == BottomMarker){
+        /*if (stack.top() == BottomMarker){
             std::cout<<"СЧАСТЬЕ ЕДИНОРОГИ"<<std::endl;
-
-        }
+        }*/
     }
 
     void cLLParser::fillTable(){
@@ -80,7 +86,7 @@ namespace parser{
             {14,0,	15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	13,	13,	13,	13,	13,	13,	0}, //<Content>
             {16,16,	17,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameters>
             {19,18,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter1>
-            {0,	0,	21,	0,	0,	20,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Equal>
+            {0,	0,	21,	0,	0,	20,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter2>
             {22,24,	26,	23,	25,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}, //<Parameter>
             {0,	0,	0,	0,	0,	0,  0,	0,	0,	0,	0,	0,	0,	0,	27,	28,	29,	30,	31,	32,	0}, //<Tag>
             {33,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}  //<Word>
@@ -99,7 +105,6 @@ namespace parser{
         p.clear();
         //2) <WebpageBody> -> <Head><Body> {‘<head’}
         p.setNumber(2);
-        //p.push_back(WebpageBody);
         p.push_back(Head);
         p.push_back(Body);
         productionsList.push_back(p);
@@ -113,15 +118,9 @@ namespace parser{
         p.push_back(cHead);
         productionsList.push_back(p);
         p.clear();
+
         //4) <Head> -> EMPTY {EMPTY}
-        p.setNumber(4);
-        p.push_back(oHead);
-        p.push_back(Parameters);
-        p.push_back(tAbove);
-        p.push_back(HeadItems);
-        p.push_back(cHead);
-        productionsList.push_back(p);
-        p.clear();
+
         //5) <HeadItems> -> <HeadItem><HeadItems> {‘<title’, ‘<meta’, ‘<link’, ‘<base’, ‘<basefont’}
         p.setNumber(5);
         p.push_back(HeadItem);
@@ -130,9 +129,6 @@ namespace parser{
         p.clear();
 
         //6) <HeadItems> -> EMPTY {EMPTY}
-        //???
-        //productionsList.push_back(p);
-        //p.clear();
 
         //7) <HeadItem> -> ‘<title’ <Parameters> ’>’ <Content> ‘</title>’ {‘<title’}
         p.setNumber(7);
@@ -206,15 +202,11 @@ namespace parser{
         p.clear();
 
         //17) <Parameters> -> EMPTY {EMPTY}
-        //???
 
-        //18) <Parameter1> -> id <Equal><Parameter> {id}
+        //18) <Parameter1> -> id <Parameter2> {id}
         p.setNumber(18);
         p.push_back(tId);
-        p.push_back(Equal);
-        p.push_back(Parameter);
-        p.push_back(HeadItems);
-        p.push_back(cHead);
+        p.push_back(Parameter2);
         productionsList.push_back(p);
         p.clear();
         //19) <Parameter1> -> STRING {STRING}
@@ -222,14 +214,14 @@ namespace parser{
         p.push_back(tString);
         productionsList.push_back(p);
         p.clear();
-        //20) <Equal> -> ‘=’ {‘=’}
+        //20) <Parameter2> -> = <Parameter> {=}
         p.setNumber(20);
         p.push_back(tEqual);
+        p.push_back(Parameter);
         productionsList.push_back(p);
         p.clear();
 
-        //21) <Equal> -> EMPTY {EMPTY}
-        //???
+        //21) <Parameter2> -> EMPTY {EMPTY}
 
         //22) <Parameter> -> STRING {STRING}
         p.setNumber(22);
@@ -251,33 +243,29 @@ namespace parser{
         p.push_back(tId);
         productionsList.push_back(p);
         p.clear();
-
-        //26) <Parameter> - > EMPTY {EMPTY}
-        //???
-
-        //27) <Tag> -> ‘<img’ <Parameters> ‘>’ {‘<img’}
-        p.setNumber(27);
+        //26) <Tag> -> ‘<img’ <Parameters> ‘>’ {‘<img’}
+        p.setNumber(26);
         p.push_back(oImg);
         p.push_back(Parameters);
         p.push_back(tAbove);
         productionsList.push_back(p);
         p.clear();
-        //28) <Tag> -> ‘<br <Parameters> ‘>’ {‘<br’}
-        p.setNumber(28);
+        //27) <Tag> -> ‘<br <Parameters> ‘>’ {‘<br’}
+        p.setNumber(27);
         p.push_back(oBr);
         p.push_back(Parameters);
         p.push_back(tAbove);
         productionsList.push_back(p);
         p.clear();
-        //29) <Tag> -> ‘<p <Parameters> ‘>’ {‘<p’}
-        p.setNumber(29);
+        //28) <Tag> -> ‘<p <Parameters> ‘>’ {‘<p’}
+        p.setNumber(28);
         p.push_back(oP);
         p.push_back(Parameters);
         p.push_back(tAbove);
         productionsList.push_back(p);
         p.clear();
-        //30) <Tag> -> ‘<h1 <Parameters> ‘>’ <Content> ‘</h1>’ {‘<h1’}
-        p.setNumber(30);
+        //29) <Tag> -> ‘<h1 <Parameters> ‘>’ <Content> ‘</h1>’ {‘<h1’}
+        p.setNumber(29);
         p.push_back(oH1);
         p.push_back(Parameters);
         p.push_back(tAbove);
@@ -285,8 +273,8 @@ namespace parser{
         p.push_back(cH1);
         productionsList.push_back(p);
         p.clear();
-        //31) <Tag> -> ‘<h2 <Parameters> ‘>’ <Content> ‘</h2>’ {‘<h2’}
-        p.setNumber(31);
+        //30) <Tag> -> ‘<h2 <Parameters> ‘>’ <Content> ‘</h2>’ {‘<h2’}
+        p.setNumber(30);
         p.push_back(oH2);
         p.push_back(Parameters);
         p.push_back(tAbove);
@@ -294,8 +282,8 @@ namespace parser{
         p.push_back(cH2);
         productionsList.push_back(p);
         p.clear();
-        //32) <Tag> -> ‘<h3 <Parameters> ‘>’ <Content> ‘</h3>’ {‘<h3’}
-        p.setNumber(32);
+        //31) <Tag> -> ‘<h3 <Parameters> ‘>’ <Content> ‘</h3>’ {‘<h3’}
+        p.setNumber(31);
         p.push_back(oH3);
         p.push_back(Parameters);
         p.push_back(tAbove);
@@ -303,11 +291,58 @@ namespace parser{
         p.push_back(cH3);
         productionsList.push_back(p);
         p.clear();
-        //33) <Word> -> STRING {STRING}
-        p.setNumber(33);
+        //32) <Word> -> STRING {STRING}
+        p.setNumber(32);
         p.push_back(tString);
         productionsList.push_back(p);
         p.clear();
+    }
+
+    void cLLParser::fillStackSymbolsString(){
+        stackSymbolsString = {
+            "<HTML>",
+            "<WebpageBody>",
+            "<Head>",
+            "<HeadItems>",
+            "HeadItem",
+            "<Body>",
+            "<Content>",
+            "<Parameters>",
+            "<Parameter1>",
+            "<Parameter2>",
+            "<Parameter>",
+            "<Tag>",
+            "<Word>",
+            "BottomMarker",
+            "<html",
+            "<head",
+            "<title",
+            "<meta",
+            "<base",
+            "<link",
+            "<basefont",
+            "<body",
+            "<img",
+            "<br",
+            "<p",
+            "<h1",
+            "<h2",
+            "<h3",
+            "</html>",
+            "</head>",
+            "</title>",
+            "</body>",
+            "</h1>",
+            "</h2>",
+            "</h3>",
+            "</p>",
+            ">",
+            "id",
+            "=",
+            "INT",
+            "COLOR",
+            "STRING"
+        };
     }
 
     void cLLParser::showProductions(){

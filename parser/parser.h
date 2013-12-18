@@ -19,7 +19,7 @@ namespace parser{
         Content,
         Parameters,
         Parameter1,
-        Equal,
+        Parameter2,
         Parameter,
         Tag,
         Word,

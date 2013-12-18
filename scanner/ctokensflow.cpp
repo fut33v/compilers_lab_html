@@ -15,7 +15,9 @@ namespace scanner {
     }
 
     cToken cTokensFlow::getToken(){
-        ++currentToken;
+        if (currentToken < numOfTokens){
+            ++currentToken;
+        }
         return FlowOfTokens[currentToken];
     }
 

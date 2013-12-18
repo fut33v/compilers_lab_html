@@ -23,8 +23,10 @@ namespace parser {
         std::stack<int> stack;
         table_of_parsing_t parsingTable;
         productions_list_t productionsList;
+        std::vector<std::string> stackSymbolsString;
         void fillTable();
         void fillProductions();
+        void fillStackSymbolsString();
         int tokenToColumn(scanner::cToken* token);
         int tokenToStackSymb(scanner::cToken* token);
         enum {
