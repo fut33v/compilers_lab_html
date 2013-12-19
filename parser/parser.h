@@ -50,6 +50,20 @@ namespace parser{
         tColor, //CLASS_COLOR
         tString //CLASS_STRING
     };
+    enum tableColumn{
+        EMPTY = 2
+    };
+    enum tokenClasses {
+        CLASS_ERROR,
+        CLASS_OPENING_TAGS,
+        CLASS_CLOSING_TAGS,
+        CLASS_CLOSING_BRACE,
+        CLASS_EQUAL_SIGN,
+        CLASS_ID,
+        CLASS_INT,
+        CLASS_COLOR,
+        CLASS_STRING
+    };
 }
 
 #endif // TOKEN_H

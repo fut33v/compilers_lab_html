@@ -32,21 +32,6 @@ namespace parser {
         void fillStackSymbolsString();
         int tokenToColumn(scanner::cToken* token);
         int tokenToStackSymb(scanner::cToken* token);
-
-        enum tableColumn{
-            EMPTY = 2
-        };
-        enum tokenClasses {
-            CLASS_ERROR,
-            CLASS_OPENING_TAGS,
-            CLASS_CLOSING_TAGS,
-            CLASS_CLOSING_BRACE,
-            CLASS_EQUAL_SIGN,
-            CLASS_ID,
-            CLASS_INT,
-            CLASS_COLOR,
-            CLASS_STRING
-        };
     };
 }
 

@@ -20,8 +20,8 @@ namespace parser{
         while (!tokensFlow->isEnd()){
             scanner::cToken token;
             token = tokensFlow->showToken();
-            std::cout<<"__________________________________"<<std::endl;
-            std::cout<<"| Token: "<<token.getValue()<<std::endl;
+            //std::cout<<"__________________________________"<<std::endl;
+            //std::cout<<"| Token: "<<token.getValue()<<std::endl;
             //sleep(1);
             if (token.getClassNum()== CLASS_ERROR){
                 std::cout<<"String has NOT passed the validation (wrong token)!!!";
@@ -29,13 +29,13 @@ namespace parser{
             }
             int top;
             top = stack.top();
-            std::cout<<"| Top: "<<stackSymbolsString[top]<<std::endl;
-            std::cout<<"|_________________________________"<<std::endl;
+            //std::cout<<"| Top: "<<stackSymbolsString[top]<<std::endl;
+            //std::cout<<"|_________________________________"<<std::endl;
             if (top > BottomMarker){
                 if (top == tokenToStackSymb(&token)){
                     stack.pop();
-                    std::cout<<"Token \'"<<token.getValue()<<"\' has been deleted, stack.top: "
-                            <<stackSymbolsString[stack.top()]<<std::endl;
+                    //std::cout<<"Token \'"<<token.getValue()<<"\' has been deleted, stack.top: "
+                           // <<stackSymbolsString[stack.top()]<<std::endl;
                     if (stack.top() == BottomMarker){
                         std::cout<<"String has PASSED the validation!!!"<<std::endl;
                         return;
@@ -48,7 +48,6 @@ namespace parser{
                 }
             } else if (top != BottomMarker){
                 int production = parsingTable[top][tokenToColumn(&token)];
-                //std::cout<<"row:"<<top<<"column:"<<tokenToColumn(&token)<<"token:"<<token.getValue();
                 std::cout<<"Production "<<production<<" for "<< stackSymbolsString[top] << ":" << std::endl;
                 if ((production > 0) && (production < 33)){
                     for (auto it : productionsList){
