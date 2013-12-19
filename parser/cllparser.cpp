@@ -20,30 +20,29 @@ namespace parser{
         while (!tokensFlow->isEnd()){
             scanner::cToken token;
             token = tokensFlow->showToken();
-            //std::cout<<"__________________________________"<<std::endl;
-            //std::cout<<"| Token: "<<token.getValue()<<std::endl;
-            //sleep(1);
+            std::cout<<"__________________________________"<<std::endl;
+            std::cout<<"| Token: "<<token.getValue()<<std::endl;
             if (token.getClassNum()== CLASS_ERROR){
                 std::cout<<"String has NOT passed the validation (wrong token)!!!";
                 return;
             }
             int top;
             top = stack.top();
-            //std::cout<<"| Top: "<<stackSymbolsString[top]<<std::endl;
-            //std::cout<<"|_________________________________"<<std::endl;
+            std::cout<<"| Top: "<<stackSymbolsString[top]<<std::endl;
+            std::cout<<"|_________________________________"<<std::endl;
             if (top > BottomMarker){
                 if (top == tokenToStackSymb(&token)){
                     stack.pop();
-                    //std::cout<<"Token \'"<<token.getValue()<<"\' has been deleted, stack.top: "
-                           // <<stackSymbolsString[stack.top()]<<std::endl;
+                    std::cout<<"Token \'"<<token.getValue()<<"\' has been deleted, stack.top: "
+                             <<stackSymbolsString[stack.top()]<<std::endl;
                     if (stack.top() == BottomMarker){
                         std::cout<<"String has PASSED the validation!!!"<<std::endl;
                         return;
                     }
                     tokensFlow->getToken();                    
                 } else {
-                    std::cout<<"String has NOT passed the validation!!! " << top << " "
-                            << token.getValue() << " " << tokenToStackSymb(&token);
+                    std::cout<<"String has NOT passed the validation!!! "<<std::endl;
+                    std::cout<<"Wrong Token "<<token.getValue()<<" on string# №"<<token.getStringNum()<<std::endl;
                     return;
                 }
             } else if (top != BottomMarker){
