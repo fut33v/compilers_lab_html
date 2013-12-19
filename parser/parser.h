@@ -6,9 +6,6 @@
 #include "cproduction.h"
 
 namespace parser{
-    typedef std::vector<std::vector<int>> table_of_parsing_t;
-    //typedef std::vector<cProduction> productions_list_t;
-
     enum stackSymbols {
         HTML,
         WebpageBody,
@@ -28,8 +25,8 @@ namespace parser{
         oHead, //<head
         oTitle, //<title e.t.c
         oMeta,
-        oBase,
         oLink,
+        oBase,
         oBasefont,
         oBody,
         oImg,

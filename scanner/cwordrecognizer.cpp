@@ -14,8 +14,8 @@ namespace scanner{
         addReserved("head", 1, 15);
         addReserved("title", 1, 16);
         addReserved("meta", 1, 17);
-        addReserved("base", 1, 18);
-        addReserved("link", 1, 19);
+        addReserved("link", 1, 18);
+        addReserved("base", 1, 19);
         addReserved("basefont", 1, 20);
         addReserved("body", 1, 21);
         addReserved("img", 1, 22);
@@ -24,14 +24,14 @@ namespace scanner{
         addReserved("h1", 1, 25);
         addReserved("h2", 1, 26);
         addReserved("h3", 1, 27);
-        addReserved("</html>", 1, 28);
-        addReserved("</head>", 1, 29);
-        addReserved("</title>", 1, 30);
-        addReserved("</body>", 1, 31);
-        addReserved("</h1>", 1, 32);
-        addReserved("</h2>", 1, 33);
-        addReserved("</h3>", 1, 34);
-        addReserved("</p>", 1, 35);
+        addReserved("</html>", 2, 28);
+        addReserved("</head>", 2, 29);
+        addReserved("</title>", 2, 30);
+        addReserved("</body>", 2, 31);
+        addReserved("</h1>", 2, 32);
+        addReserved("</h2>", 2, 33);
+        addReserved("</h3>", 2, 34);
+        addReserved("</p>", 2, 35);
     }
 
     void cWordRecognizer::addReserved(std::string reserved, int Class, int subClass){

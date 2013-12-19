@@ -20,7 +20,8 @@ namespace parser{
         while (!tokensFlow->isEnd()){
             scanner::cToken token;
             token = tokensFlow->showToken();
-            std::cout<<"Token: "<<token.getValue()<<std::endl;
+            std::cout<<"__________________________________"<<std::endl;
+            std::cout<<"| Token: "<<token.getValue()<<std::endl;
             //sleep(1);
             if (token.getClassNum()== CLASS_ERROR){
                 std::cout<<"String has NOT passed the validation (wrong token)!!!";
@@ -28,11 +29,12 @@ namespace parser{
             }
             int top;
             top = stack.top();
-            std::cout<<"Top: "<<stackSymbolsString[top]<<std::endl;
+            std::cout<<"| Top: "<<stackSymbolsString[top]<<std::endl;
+            std::cout<<"|_________________________________"<<std::endl;
             if (top > BottomMarker){
                 if (top == tokenToStackSymb(&token)){
                     stack.pop();
-                    std::cout<<"Token "<<token.getValue()<<" has been deleted, stack.top: "
+                    std::cout<<"Token \'"<<token.getValue()<<"\' has been deleted, stack.top: "
                             <<stackSymbolsString[stack.top()]<<std::endl;
                     if (stack.top() == BottomMarker){
                         std::cout<<"String has PASSED the validation!!!"<<std::endl;
@@ -46,11 +48,16 @@ namespace parser{
                 }
             } else if (top != BottomMarker){
                 int production = parsingTable[top][tokenToColumn(&token)];
-                std::cout<<"row:"<<top<<"column:"<<tokenToColumn(&token);
-                std::cout<<"Production "<<production<<" for "<< stackSymbolsString[top] <<std::endl;
-                if (production > 0 && production < 33){
+                //std::cout<<"row:"<<top<<"column:"<<tokenToColumn(&token)<<"token:"<<token.getValue();
+                std::cout<<"Production "<<production<<" for "<< stackSymbolsString[top] << ":" << std::endl;
+                if ((production > 0) && (production < 33)){
                     for (auto it : productionsList){
                         if (it.getNumber() == production){
+                            std::cout<<stackSymbolsString[top]<<" -> ";
+                            for (auto it2 : it){
+                                std::cout<<stackSymbolsString[it2]<<" ";
+                            }
+                            std::cout<<std::endl;
                             stack.pop();
                             std::vector<int>::reverse_iterator it2;
                             for (it2 = it.rbegin(); it2!= it.rend(); it2++){
@@ -60,7 +67,7 @@ namespace parser{
                         }
                     }
                 } else {
-                    if (parsingTable[top][tEmpty] != 0){
+                    if (parsingTable[top][EMPTY] != 0){
                         std::cout<<"Nullify production for "<< stackSymbolsString[top] <<std::endl;
                         stack.pop();
                     } else {
@@ -299,7 +306,7 @@ namespace parser{
             "<WebpageBody>",
             "<Head>",
             "<HeadItems>",
-            "HeadItem",
+            "<HeadItem>",
             "<Body>",
             "<Content>",
             "<Parameters>",
@@ -340,25 +347,6 @@ namespace parser{
         };
     }
 
-    void cLLParser::showProductions(){
-        for (auto it : productionsList){
-            for (auto it2 : it){
-                std::cout<<it2<<" ";
-            }
-            std::cout<<std::endl;
-        }
-    }
-
-    void cLLParser::showTable(){
-        std::cout<<"Parsing Table:"<<std::endl;
-        for (auto it : parsingTable){
-            for (auto it2 : it){
-                std::cout<<it2<<" ";
-            }
-            std::cout<<std::endl;
-        }
-    }
-
     int cLLParser::tokenToColumn(scanner::cToken* token){
         switch(token->getClassNum()){
             case CLASS_STRING: {
@@ -380,7 +368,6 @@ namespace parser{
                 return token->getSubClassNum()-8;
             }
             case CLASS_CLOSING_TAGS: {
-                std::cout<<"РОТ ЕБАЛ";
                 return -1;
             }
         }

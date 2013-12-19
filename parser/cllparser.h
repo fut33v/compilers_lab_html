@@ -13,29 +13,28 @@
 
 namespace parser {
     typedef std::vector<cProduction> productions_list_t;
+    typedef std::vector<std::vector<int>> table_of_parsing_t;
+
     class cLLParser{
     public:
         cLLParser(scanner::cTokensFlow* tokensFlow);
         void initParser();
         void startParsing();
-        void showTable();
-        void showProductions();
     private:
         scanner::cTokensFlow* tokensFlow;
         std::stack<int> stack;
         table_of_parsing_t parsingTable;
         productions_list_t productionsList;
         std::vector<std::string> stackSymbolsString;
+
         void fillTable();
         void fillProductions();
         void fillStackSymbolsString();
         int tokenToColumn(scanner::cToken* token);
         int tokenToStackSymb(scanner::cToken* token);
-        enum {
-            BUF_SIZE = 256,
-            NUM_OF_PRODUCTIONS = 33,
-            MAGIC_NUMBER = 8,
-            tEmpty = 2
+
+        enum tableColumn{
+            EMPTY = 2
         };
         enum tokenClasses {
             CLASS_ERROR,
@@ -47,22 +46,6 @@ namespace parser {
             CLASS_INT,
             CLASS_COLOR,
             CLASS_STRING
-        };
-        enum openingTags {
-            html = 1,
-            head,
-            title,
-            meta,
-            base,
-            link,
-            basefont,
-            body,
-            img,
-            br,
-            p,
-            h1,
-            h2,
-            h3
         };
     };
 }
