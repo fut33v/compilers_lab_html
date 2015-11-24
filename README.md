@@ -1,4 +1,4 @@
- compilers_lab_02
+ compilers_lab_html
 ================
 This is the lexeme scanner and parser for subset of HTML, which describes with this grammatic productions:
 
